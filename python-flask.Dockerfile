@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 
 ENV FLASK_APP /opt/server.py
 
-CMD ["flask", "run"]
+# CMD ["flask", "run"]
