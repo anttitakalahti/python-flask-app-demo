@@ -2,8 +2,8 @@ FROM python:3.7
 ADD . ./opt/
 WORKDIR /opt/
 
-ARG runtime_port=5000
-ENV port_number=$runtime_port
+ARG PORT=5000
+ENV port_number=$PORT
 
 EXPOSE $port_number
 
