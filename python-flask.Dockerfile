@@ -10,4 +10,4 @@ RUN pwd
 RUN ls
 RUN ls /opt
 
-CMD ["FLASK_APP=server.py", "flask", "run"]
+CMD ["FLASK_APP=/opt/server.py", "flask", "run"]
