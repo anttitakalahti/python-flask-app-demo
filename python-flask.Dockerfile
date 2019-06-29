@@ -1,19 +1,11 @@
 FROM python:3.7
 ADD . ./opt/
 WORKDIR /opt/
-
-RUN echo $PORT
-
-ARG PORT=5000
-ENV port_number=$PORT
-
-RUN echo $PORT
-
-EXPOSE $port_number
+EXPOSE 5000
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 ENV FLASK_APP /opt/server.py
 
-CMD flask run -p $port_number
+CMD flask run -p $PORT
