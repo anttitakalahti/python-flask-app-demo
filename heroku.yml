@@ -1,6 +1,3 @@
 build:
   docker:
     web: python-flask.Dockerfile
-
-run:
-  web: flask run
