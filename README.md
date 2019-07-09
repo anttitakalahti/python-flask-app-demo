@@ -13,7 +13,10 @@ This is an exercise and do not run this in production.
 ¯\_(ツ)_/¯ ~/Work/python-flask [master] [tade@zero] > docker build -t python-flask:latest .
 ¯\_(ツ)_/¯ ~/Work/python-flask [master] [tade@zero] > docker run -p 5000:5000 -e PORT=5000 python-flask
 
->>>>>>> 7b7f684afbb72e1370e72bcfa1c581e9159390f2
-
 heroku container:push python-flask
 heroku container:release python-flask
+
+## Test
+
+* run from PyCharm
+* curl -F 'file=@kasi.jpg' http://127.0.0.1:5000/predict

@@ -1,4 +1,3 @@
-import json
 import numpy
 import os
 import torch
@@ -6,6 +5,7 @@ import torchvision
 import torch.nn.functional as F
 import torch.optim as optim
 from net import Net
+from typing import Any, Dict
 
 """
     adapted from:  https://nextjournal.com/gkoehler/pytorch-mnist
@@ -54,7 +54,6 @@ def load_model():
 def train(epoch):
     network.train()
     for batch_idx, (data, target) in enumerate(train_loader):
-        print(data.shape)
         optimizer.zero_grad()
         output = network(data)
         loss = F.nll_loss(output, target)
@@ -68,11 +67,12 @@ def train(epoch):
             torch.save(optimizer.state_dict(), OPTIMIZER_PATH)
 
 
-def predict(image: numpy.ndarray) -> str:
+def predict(image: numpy.ndarray) -> Dict[str, Any]:
     output = network(image)
     prediction = output.data.max(1, keepdim=True)[1].item()
 
-    return json.dumps({"predicted_label": prediction})
+    return {"predicted_label": prediction}
+
 
 
 
