@@ -11,7 +11,6 @@ def jpg_pixels_without_rgb(filename: str) -> numpy.ndarray:
         i.resize((28, 28))
 
     i.load()
-    img = i.convert("L")
-    data = numpy.asarray(img, dtype="float32")
+    img = i.convert("L")  # ... translating a color image to greyscale (mode “L”) ...
 
-    return data
+    return numpy.asarray(img, dtype="float32")

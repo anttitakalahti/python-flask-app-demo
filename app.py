@@ -1,33 +1,35 @@
 import os
 import torch
-import numpy
-from predictor import initialize_model, predict
+
 from flask import Flask, json, redirect, request
-from image import jpg_pixels_without_rgb
 from werkzeug.utils import secure_filename
 from werkzeug.wrappers import Response
+
+from predictor import initialize_model, predict
+from image import jpg_pixels_without_rgb
 
 app = Flask(__name__)
 
 dirname = os.path.dirname(__file__)
-UPLOAD_FOLDER = os.path.join(dirname, 'upload')
+UPLOAD_FOLDER = os.path.join(dirname, "upload")
 
-@app.route('/')
+
+@app.route("/")
 def hello_world() -> str:
-    return 'Hello World! I\'m a Dockerized Flask app!'
+    return "Hello World! I'm a Dockerized Flask app!"
 
 
-@app.route('/predict', methods=['POST'])
+@app.route("/predict", methods=["POST"])
 def predict_label() -> Response:
-    main()
+    initialize_model()  # TODO remove this when you are ready to deploy this to cloud (where main() is run)
 
-    if 'file' not in request.files:
+    if "file" not in request.files:
         return redirect('/')
 
     # http://flask.pocoo.org/docs/1.0/api/#flask.Request.files
-    file = request.files['file']
-    if file.filename == '':
-        return redirect('/')
+    file = request.files["file"]
+    if file.filename == "":
+        return redirect("/")
 
     filename = os.path.join(UPLOAD_FOLDER, secure_filename(file.filename))
     file.save(filename)
@@ -38,17 +40,15 @@ def predict_label() -> Response:
     pixels = torch.zeros(1, 1, 28, 28)
     pixels[0][0] = torch.from_numpy(p)
 
-    print(type(pixels))
-
     return json.jsonify(predict(pixels))
 
 
 def main():
     initialize_model()
 
-    port = int(os.environ.get('PORT', 5000))
-    app.run(debug=True, host='0.0.0.0', port=port)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=True, host="0.0.0.0", port=port)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
