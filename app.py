@@ -11,8 +11,7 @@ from predictor import initialize_model, predict
 
 app = Flask(__name__)
 
-dirname = os.path.dirname(__file__)
-UPLOAD_FOLDER = os.path.join(dirname, "upload")
+UPLOAD_FOLDER = os.path.join("/tmp", "upload")
 
 
 @app.route("/")
@@ -51,7 +50,7 @@ def store_image_with_label() -> Response:
     label = int(request.form['label'])
 
     image_id = store_image_with_label(pixels, label)
-    
+
     return json.jsonify({"image_id": image_id})
 
 
