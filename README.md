@@ -14,11 +14,16 @@ This is an exercise and do not run this in production.
 * heroku container:release python-flask
 * git push heroku master
 
-## Test
+## Test local setup
 
 * run from PyCharm
 * curl -F 'file=@kasi.jpg' http://127.0.0.1:5000/predict
 
+
+## Test live version
+
+* curl -F 'file=@kasi.jpg' https://python-flask-app-demo.herokuapp.com/predict
+* curl -F 'file=@kasi.jpg' -F 'label=8' https://python-flask-app-demo.herokuapp.com/store
 
 ## TODO 
 

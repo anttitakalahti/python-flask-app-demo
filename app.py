@@ -37,7 +37,7 @@ def predict_label() -> Response:
 
 
 @app.route("/store", methods=["POST"])
-def store_image_with_label() -> Response:
+def store() -> Response:
     if not has_file_form_field(request):
         return redirect("/")
 
