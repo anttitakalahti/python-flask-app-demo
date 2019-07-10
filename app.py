@@ -54,11 +54,11 @@ def store() -> Response:
     return json.jsonify({"image_id": image_id})
 
 
-def has_file_form_field(request: request) -> bool:
-    if "file" not in request.files:
+def has_file_form_field(req: request) -> bool:
+    if "file" not in req.files:
         return False
 
-    file = request.files["file"]
+    file = req.files["file"]
     if file.filename == "":
         return False
 

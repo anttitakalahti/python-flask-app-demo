@@ -17,14 +17,16 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 
 
 def store_image_with_label(pixels: numpy.ndarray, label: int) -> int:
-    sql = """INSERT INTO images (pixels, label) VALUES (%s, %d) RETURNING image_id;"""
+    sql = "INSERT INTO images (pixels, label) VALUES (%s, %d) RETURNING image_id;"
 
     image_id = 0
     try:
         conn = psycopg2.connect(DATABASE_URL, sslmode="require")
         cur = conn.cursor()
 
-        cur.execute(sql, (pixels.tostring(), label,))
+        print(sql)
+
+        cur.execute(sql, (pixels.tostring(), label))
 
         image_id = cur.fetchone()[0]
 
