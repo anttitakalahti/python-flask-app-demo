@@ -11,7 +11,7 @@ from predictor import initialize_model, predict
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = os.path.join("/tmp", "upload")
+UPLOAD_FOLDER = "/tmp"  # /tmp is the only place where web app can write
 
 
 @app.route("/")
