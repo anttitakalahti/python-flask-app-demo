@@ -17,7 +17,7 @@ DATABASE_URL = os.environ["DATABASE_URL"]
 
 
 def store_image_with_label(pixels: numpy.ndarray, label: int) -> int:
-    sql = "INSERT INTO images (pixels, label) VALUES (%s, %d) RETURNING image_id;"
+    sql = "INSERT INTO images (pixels, label) VALUES (%s, %s) RETURNING image_id;"
 
     image_id = 0
     try:
@@ -33,7 +33,6 @@ def store_image_with_label(pixels: numpy.ndarray, label: int) -> int:
         conn.commit()
 
         cur.close()
-
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     finally:
