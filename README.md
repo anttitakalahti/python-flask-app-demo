@@ -3,20 +3,23 @@
 
 This is an exercise and do not run this in production.
 
-## Build Docker image
+## Running locally
 
-¯\_(ツ)_/¯ ~/Work/python-flask [master] [tade@zero] > docker build -t python-flask:latest .
-¯\_(ツ)_/¯ ~/Work/python-flask [master] [tade@zero] > docker run -p 5000:5000 -e PORT=5000 python-flask
+* docker run -p 5000:5000 -e PORT=5000 -e DATABASE_URL=postgres://$(whoami) python-flask
 
-## Update Heroku Docker image
-=======
-¯\_(ツ)_/¯ ~/Work/python-flask [master] [tade@zero] > docker build -t python-flask:latest .
-¯\_(ツ)_/¯ ~/Work/python-flask [master] [tade@zero] > docker run -p 5000:5000 -e PORT=5000 python-flask
+## Deploy to heroku
 
-heroku container:push python-flask
-heroku container:release python-flask
+* docker build -t python-flask:latest .
+* heroku container:push python-flask
+* heroku container:release python-flask
+* git push heroku master
 
 ## Test
 
 * run from PyCharm
 * curl -F 'file=@kasi.jpg' http://127.0.0.1:5000/predict
+
+
+## TODO 
+
+* unit tests

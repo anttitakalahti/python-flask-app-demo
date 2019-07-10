@@ -5,8 +5,9 @@ from flask import Flask, json, redirect, request
 from werkzeug.utils import secure_filename
 from werkzeug.wrappers import Response
 
-from predictor import initialize_model, predict
+from database import store_image_with_label
 from image import jpg_pixels_without_rgb
+from predictor import initialize_model, predict
 
 app = Flask(__name__)
 
@@ -21,26 +22,48 @@ def hello_world() -> str:
 
 @app.route("/predict", methods=["POST"])
 def predict_label() -> Response:
-    initialize_model()  # TODO remove this when you are ready to deploy this to cloud (where main() is run)
-
-    if "file" not in request.files:
-        return redirect('/')
-
-    # http://flask.pocoo.org/docs/1.0/api/#flask.Request.files
-    file = request.files["file"]
-    if file.filename == "":
+    if not has_file_form_field(request):
         return redirect("/")
+
+    file = request.files["file"]
 
     filename = os.path.join(UPLOAD_FOLDER, secure_filename(file.filename))
     file.save(filename)
 
-    p = jpg_pixels_without_rgb(filename)
-
     # TODO learn how to initialize this properly
     pixels = torch.zeros(1, 1, 28, 28)
-    pixels[0][0] = torch.from_numpy(p)
+    pixels[0][0] = torch.from_numpy(jpg_pixels_without_rgb(filename))
 
     return json.jsonify(predict(pixels))
+
+
+@app.route("/store", methods=["POST"])
+def store_image_with_label() -> Response:
+    if not has_file_form_field(request):
+        return redirect("/")
+
+    file = request.files["file"]
+
+    filename = os.path.join(UPLOAD_FOLDER, secure_filename(file.filename))
+    file.save(filename)
+
+    pixels = jpg_pixels_without_rgb(filename)
+    label = int(request.form['label'])
+
+    image_id = store_image_with_label(pixels, label)
+    
+    return json.jsonify({"image_id": image_id})
+
+
+def has_file_form_field(request: request) -> bool:
+    if "file" not in request.files:
+        return False
+
+    file = request.files["file"]
+    if file.filename == "":
+        return False
+
+    return True
 
 
 def main():
