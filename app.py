@@ -5,9 +5,9 @@ from flask import Flask, json, redirect, request
 from werkzeug.utils import secure_filename
 from werkzeug.wrappers import Response
 
-from database import store_image_with_label
-from image import jpg_pixels_without_rgb
-from predictor import initialize_model, predict
+import database
+import image
+import predictor
 
 app = Flask(__name__)
 
@@ -31,9 +31,11 @@ def predict_label() -> Response:
 
     # TODO learn how to initialize this properly
     pixels = torch.zeros(1, 1, 28, 28)
-    pixels[0][0] = torch.from_numpy(jpg_pixels_without_rgb(filename))
+    pixels[0][0] = torch.from_numpy(image.jpg_pixels_without_rgb(filename))
 
-    return json.jsonify(predict(pixels))
+    prediction = predictor.predict(pixels)
+
+    return json.jsonify({"predicted_label": prediction})
 
 
 @app.route("/store", methods=["POST"])
@@ -46,10 +48,10 @@ def store() -> Response:
     filename = os.path.join(UPLOAD_FOLDER, secure_filename(file.filename))
     file.save(filename)
 
-    pixels = jpg_pixels_without_rgb(filename)
+    pixels = image.jpg_pixels_without_rgb(filename)
     label = int(request.form['label'])
 
-    image_id = store_image_with_label(pixels, label)
+    image_id = database.store_image_with_label(pixels, label)
 
     return json.jsonify({"image_id": image_id})
 
@@ -66,7 +68,7 @@ def has_file_form_field(req: request) -> bool:
 
 
 def main():
-    initialize_model()
+    predictor.initialize_model()
 
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=True, host="0.0.0.0", port=port)

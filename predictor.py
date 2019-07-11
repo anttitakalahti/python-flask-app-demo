@@ -4,7 +4,6 @@ import torchvision
 import torch.nn.functional as F
 import torch.optim as optim
 from net import Net
-from typing import Any, Dict
 
 """
     adapted from:  https://nextjournal.com/gkoehler/pytorch-mnist
@@ -66,11 +65,10 @@ def train(epoch: int):
             torch.save(optimizer.state_dict(), OPTIMIZER_PATH)
 
 
-def predict(image: torch.Tensor) -> Dict[str, Any]:
+def predict(image: torch.Tensor) -> int:
     output = network(image)
-    prediction = output.data.max(1, keepdim=True)[1].item()
+    return output.data.max(1, keepdim=True)[1].item()
 
-    return {"predicted_label": prediction}
 
 
 
