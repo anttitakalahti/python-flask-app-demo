@@ -1,4 +1,4 @@
-# This is a small python app to classify 28 x 28 digits.
+# This is a small python app to classify 28 x 28 pixel digits.
 
 This is an exercise and do not run this in production.
 
